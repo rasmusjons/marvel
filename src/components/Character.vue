@@ -12,33 +12,44 @@
               class="searchForm"
               v-model="search"
               placeholder="Enter text..."
+              @keyup.enter="getCharacters"
             />
-            <button @click="getCharacters">Start</button>
+            <button @click="getCharacters">
+              Start
+            </button>
           </div>
         </b-col>
       </b-row>
       <b-row class="characterCard">
         <b-col md="8">
+          <!-- MODAL -->
+
+          <app-modal
+            v-if="modalVisible"
+            :data="modalData"
+            @closeModal="closeModal"
+          ></app-modal>
           <div v-for="comic in comics" :key="comic.index" class="charCard">
             <h1 v-if="empty">Game Over! Try a different search</h1>
-            <h1>{{ comic.name }}</h1>
-            <p>{{ comic.description }}</p>
-            <img :src="comic.thumbnail.path + '/standard_xlarge.jpg'" />
+            <h1 @click="openModal(comic)">{{ comic.name }}</h1>
+            <img
+              @click="openModal(comic)"
+              :src="comic.thumbnail.path + '/standard_xlarge.jpg'"
+            />
+            <br />
+            <br />
 
-            <h5 v-if="comic.events.items.length != 0">
-              Appears in these adventures:
-            </h5>
-            <b-table
-              id="my-table"
-              :items="comic.events.items"
-              :per-page="perPage"
-              :current-page="currentPage"
-              small
-            ></b-table>
+            <button @click="openModal(comic)">More Info</button>
+
             <button
               @click="
-                saveChar(comic.name, comic.description, comic.thumbnail.path),
-                  doVote(comic.id)
+                saveChar(
+                  comic.name,
+                  comic.description,
+                  comic.thumbnail.path,
+                  comic.id
+                ),
+                  doClick(comic.id)
               "
               :disabled="clickedButtons.includes(comic.id)"
             >
@@ -47,11 +58,18 @@
           </div>
         </b-col>
 
+        <!-- MY SAVED CHAR -->
         <b-col md="4" class="savedChar">
           <h1>My characters</h1>
 
-          <div v-for="myChar in mySavedChar" :key="myChar.index">
+          <div v-for="(myChar, index) in mySavedChar" :key="myChar.index">
             <h5>{{ myChar.name }}</h5>
+            <button
+              class="savedCharButton"
+              @click="removeChar(index), removeClick(myChar.id)"
+            >
+              Remove
+            </button>
             <img :src="myChar.imageUrl + '/portrait_small.jpg'" />
             <p>{{ myChar.description }}</p>
 
@@ -71,6 +89,7 @@
 <script>
 // import md5 from "md5";
 import axios from "axios";
+import modal from "./Modal";
 
 export default {
   async beforeMount() {
@@ -97,9 +116,10 @@ export default {
   },
   data() {
     return {
+      modalVisible: false,
+      modalData: null,
       active: false,
-      perPage: 5,
-      currentPage: 1,
+
       comics: [],
       flatEvents: [],
       search: "",
@@ -111,14 +131,28 @@ export default {
   },
 
   methods: {
-    doVote(id) {
+    openModal(data) {
+      this.modalVisible = true;
+      this.modalData = data;
+    },
+    closeModal() {
+      this.modalVisible = false;
+    },
+    doClick(id) {
       this.clickedButtons.push(id);
-      console.log("doVote -> this.clickedButtons", this.clickedButtons);
-
       if (!id) {
         return;
       }
     },
+    removeClick(id) {
+      const isId = element => element.id === id;
+      const index = this.clickedButtons.findIndex(isId);
+      this.clickedButtons.splice(index, 1);
+      if (!id) {
+        return;
+      }
+    },
+
     eventsComputed() {
       let events = [];
       this.comics.forEach(comic => {
@@ -153,8 +187,11 @@ export default {
         console.log(e);
       }
     },
-    saveChar(name, description, imageUrl) {
-      this.mySavedChar.push({ name, description, imageUrl });
+    saveChar(name, description, imageUrl, id) {
+      this.mySavedChar.push({ name, description, imageUrl, id });
+    },
+    removeChar(index) {
+      this.mySavedChar.splice(index, 1);
     }
   },
   computed: {
@@ -165,6 +202,9 @@ export default {
       });
       return events.length;
     }
+  },
+  components: {
+    appModal: modal
   }
 };
 </script>
@@ -196,6 +236,20 @@ export default {
 
 .savedChar {
   background-color: rgba(218, 165, 32, 0.235);
+  padding: 20px;
+}
+
+.savedCharButton {
+  width: 90px;
+  height: 30px;
+  border: 0;
+  box-shadow: 2px 2px 3px 1px #fa9900;
+  background-color: #ab6600;
+  font-family: "Press Start 2P", cursive;
+  color: goldenrod;
+  text-shadow: 3px 3px black;
+  font-size: 12px;
+  float: right;
 }
 
 .b-table {
@@ -220,17 +274,15 @@ button {
   width: 150px;
   height: 50px;
   border: 0;
-  margin-bottom: 60px;
   box-shadow: 2px 2px 3px 1px #fa9900;
   background-color: #ab6600;
   transition: 0.05s;
-  margin: 20px;
   font-family: "Press Start 2P", cursive;
   color: goldenrod;
   text-shadow: 3px 3px black;
   font-size: 12px;
-
   font-weight: 100;
+  margin: 10px !important;
 }
 
 button:active {
@@ -241,9 +293,16 @@ button:disabled {
 }
 
 .charCard {
-  background: rgba(245, 245, 245, 0.1);
+  background-color: rgba(218, 165, 32, 0.235);
+
   margin-bottom: 20px;
   padding: 20px;
+}
+
+.charChard,
+img,
+h1 {
+  cursor: pointer;
 }
 
 .bottleImage {

@@ -1,28 +1,35 @@
 <template>
   <div id="app">
     <div class="bodyContainer">
-      <!-- <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div> -->
-      <!-- 
-      <router-view /> -->
-      <app-home></app-home>
+      <div id="nav">
+        <router-link to="/">Home</router-link> |
+        <router-link to="/about">About</router-link>
+      </div>
+
+      <router-view />
     </div>
   </div>
 </template>
 
 <script>
-import HomeVue from "./views/Home.vue";
 export default {
-  components: {
-    appHome: HomeVue
-  }
+  components: {}
 };
 </script>
 
 <style scoped>
+@import url(https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap);
+
+* {
+  font-family: "Press Start 2P", cursive;
+  color: goldenrod;
+}
+
+#nav {
+  text-align: center;
+}
 .bodyContainer {
   background: url(assets/backg.jpg);
+  min-height: 1000px;
 }
 </style>
