@@ -4,8 +4,10 @@
     <br />
     <h1 class="headline">Find your hero!</h1>
 
-    <b-button v-b-toggle.sidebar-1>Toggle Sidebar</b-button>
-    <b-sidebar id="sidebar-1" title="Sidebar" right shadow>
+    <div class="sidebarButtonContainer">
+      <button v-b-toggle.sidebar-1 class="startChatButton">Chat!</button>
+    </div>
+    <b-sidebar id="sidebar-1" title="Chat">
       <div class="px-3 py-2">
         <app-chat :charData="sendCharToChat"></app-chat>
       </div>
@@ -18,11 +20,11 @@
             <input
               class="searchForm"
               v-model="search"
-              placeholder="Enter text..."
+              placeholder="Find character..."
               @keyup.enter="getCharacters"
             />
             <button @click="getCharacters">
-              Start
+              Search
             </button>
           </div>
         </b-col>
@@ -81,8 +83,11 @@
             >
               Remove
             </button>
-            <button @click="sendtoChat(myChar.name, myChar.description)">
-              SEND
+            <button
+              class="savedCharButton"
+              @click="sendtoChat(myChar.name, myChar.description)"
+            >
+              Send to chat
             </button>
             <img :src="myChar.imageUrl + '/portrait_small.jpg'" />
             <p>{{ myChar.description }}</p>
@@ -182,13 +187,13 @@ export default {
       let options = "";
 
       if (this.search.length === 0) {
-        options = "nameStartsWith=x-";
+        options = "nameStartsWith=da";
       } else options = "nameStartsWith=" + this.search;
       console.log(options);
       const url =
         "https://gateway.marvel.com:443/v1/public/characters?" +
         options +
-        "&limit=100&ts=thesoer&apikey=001ac6c73378bbfff488a36141458af2&hash=72e5ed53d1398abb831c3ceec263f18b";
+        "&limit=100&ts=rasmus&apikey=974dd323b12ad5c9b53f8222ae4ca7d6&hash=a457dc82c80b6cee46a52fed6fa0a99f";
 
       try {
         const response = await axios.get(url);
@@ -238,13 +243,8 @@ export default {
 }
 .container {
   text-align: left;
-  color: rgb(201, 199, 199);
   font-family: "Press Start 2P";
 }
-
-/* .component {
-  background: url(../assets/backg.jpg);
-} */
 
 #my-table td:nth-child(1) {
   display: none;
@@ -259,8 +259,8 @@ export default {
 }
 
 .savedCharButton {
-  width: 90px;
-  height: 30px;
+  width: 100px;
+  height: 40px;
   border: 0;
   box-shadow: 2px 2px 3px 1px #fa9900;
   background-color: #ab6600;
@@ -336,5 +336,41 @@ h1 {
 
 .searchForm {
   margin-right: 30px;
+}
+
+.startChatButton {
+  background: url(../assets/smile.png);
+  background-repeat: no-repeat;
+  background-color: #ab6600;
+  background-position: 95%;
+  padding: 5px;
+  width: 138px;
+  height: 33px;
+}
+
+/* SIDEBAR */
+.sidebarButtonContainer {
+  text-align: right;
+}
+
+#sidebar-1 {
+  background: url(../assets/backg.jpg);
+  background-repeat: repeat;
+  color: goldenrod !important;
+  border-right: 1px solid goldenrod;
+}
+
+.close {
+  width: 30px !important;
+  height: 30px !important;
+  box-shadow: 2px 2px 3px 1px #fa9900 !important;
+  background-color: goldenrod !important;
+  transition: 0.05s !important;
+  font-family: "Press Start 2P", cursive !important;
+  text-shadow: 3px 3px black !important;
+  font-size: 20px !important;
+  font-weight: 900 !important;
+  font-weight: 100 !important;
+  margin: 10px !important;
 }
 </style>
