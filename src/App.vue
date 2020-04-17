@@ -1,11 +1,6 @@
 <template>
   <div id="app">
     <div class="bodyContainer">
-      <div id="nav">
-        <router-link to="/">Home</router-link> |
-        <router-link to="/about">About</router-link>
-      </div>
-
       <router-view />
     </div>
   </div>
@@ -19,7 +14,7 @@ export default {
 
 <style scoped>
 @import url(https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap);
-
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap");
 * {
   font-family: "Press Start 2P", cursive;
   color: goldenrod;
