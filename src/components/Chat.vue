@@ -1,12 +1,12 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
+  <div class="chat">
+    <h1>Chat</h1>
     <input v-model="user" />
     <input v-model="message" />
     <button @click="sendMessage">SEND MESSAGE</button>
-    <h5 v-for="mess in messages" :key="mess.index">
-      {{ mess.user }}: {{ mess.message }}
-    </h5>
+    <p v-for="mess in messages" :key="mess.index">
+      {{ mess.user }}: {{ mess.message }} {{ mess.charData }}
+    </p>
   </div>
 </template>
 
@@ -14,6 +14,7 @@
 import io from "socket.io-client";
 
 export default {
+  props: ["charData"],
   mounted() {
     this.socket.on("MESSAGE", data => {
       this.messages = [...this.messages, data];
@@ -36,6 +37,17 @@ export default {
         user: this.user,
         message: this.message
       });
+    },
+    sendData() {
+      const data = this.charData.toString();
+      console.log("sendData -> data", data);
+
+      this.socket.emit("SEND_MESSAGE", { charData: data });
+    }
+  },
+  watch: {
+    charData: function() {
+      this.sendData();
     }
   }
 };

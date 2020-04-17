@@ -4,7 +4,11 @@
       <div class="modalContent" @click.stop>
         <button @click="$emit('closeModal')">X</button>
         <h2>{{ data.name }}</h2>
-        <img :src="data.thumbnail.path + '/standard_xlarge.jpg'" />
+        <img
+          :src="
+            data.thumbnail.path + '/standard_xlarge.' + data.thumbnail.extension
+          "
+        />
         <p>{{ data.description }}</p>
         <h5 v-if="data.events.items.length != 0">
           Appears in these adventures:
@@ -26,7 +30,7 @@ export default {
   props: ["data"],
   data() {
     return {
-      perPage: 5,
+      perPage: 100,
       currentPage: 1
     };
   }

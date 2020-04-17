@@ -4,6 +4,13 @@
     <br />
     <h1 class="headline">Find your hero!</h1>
 
+    <b-button v-b-toggle.sidebar-1>Toggle Sidebar</b-button>
+    <b-sidebar id="sidebar-1" title="Sidebar" right shadow>
+      <div class="px-3 py-2">
+        <app-chat :charData="sendCharToChat"></app-chat>
+      </div>
+    </b-sidebar>
+
     <b-container class="container">
       <b-row class="text-center">
         <b-col md="12">
@@ -34,7 +41,11 @@
             <h1 @click="openModal(comic)">{{ comic.name }}</h1>
             <img
               @click="openModal(comic)"
-              :src="comic.thumbnail.path + '/standard_xlarge.jpg'"
+              :src="
+                comic.thumbnail.path +
+                  '/standard_xlarge.' +
+                  comic.thumbnail.extension
+              "
             />
             <br />
             <br />
@@ -70,6 +81,9 @@
             >
               Remove
             </button>
+            <button @click="sendtoChat(myChar.name, myChar.description)">
+              SEND
+            </button>
             <img :src="myChar.imageUrl + '/portrait_small.jpg'" />
             <p>{{ myChar.description }}</p>
 
@@ -90,6 +104,7 @@
 // import md5 from "md5";
 import axios from "axios";
 import modal from "./Modal";
+import ChatVue from "./Chat.vue";
 
 export default {
   async beforeMount() {
@@ -119,18 +134,21 @@ export default {
       modalVisible: false,
       modalData: null,
       active: false,
-
       comics: [],
       flatEvents: [],
       search: "",
       mySavedChar: [],
       clickedButtons: [],
       number: 10,
-      empty: false
+      empty: false,
+      sendCharToChat: ""
     };
   },
 
   methods: {
+    sendtoChat(...arg) {
+      this.sendCharToChat = arg;
+    },
     openModal(data) {
       this.modalVisible = true;
       this.modalData = data;
@@ -204,7 +222,8 @@ export default {
     }
   },
   components: {
-    appModal: modal
+    appModal: modal,
+    appChat: ChatVue
   }
 };
 </script>
