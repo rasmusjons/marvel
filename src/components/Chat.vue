@@ -16,7 +16,8 @@
         placeholder="Type you message.."
         @keyup.enter="sendMessage"
       />
-      <button @click="sendMessage">SEND MESSAGE</button>
+      <button v-if="user === ''" :disabled="true">Pick a name</button>
+      <button v-else @click="sendMessage">Send</button>
     </div>
   </div>
 </template>
@@ -36,7 +37,7 @@ export default {
       user: "",
       message: "",
       messages: [],
-      socket: io("localhost:3000")
+      socket: io(process.env.PORT || 3000)
     };
   },
   methods: {

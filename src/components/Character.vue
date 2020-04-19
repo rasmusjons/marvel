@@ -2,7 +2,12 @@
   <div class="component">
     <br />
     <br />
-    <h1 class="headline">Find your hero!</h1>
+    <h1 class="headline">
+      Find your hero!
+    </h1>
+    <h2 class="subHeadline">
+      Search for Marvel characters. Then share & discuss in the chat!
+    </h2>
 
     <div class="sidebarButtonContainer">
       <button v-b-toggle.sidebar-1 class="startChatButton">Chat!</button>
@@ -40,8 +45,9 @@
           ></app-modal>
           <div v-for="comic in comics" :key="comic.index" class="charCard">
             <h1 v-if="empty">Game Over! Try a different search</h1>
-            <h1 @click="openModal(comic)">{{ comic.name }}</h1>
+            <h1 class="charName" @click="openModal(comic)">{{ comic.name }}</h1>
             <img
+              class="charImg"
               @click="openModal(comic)"
               :src="
                 comic.thumbnail.path +
@@ -73,7 +79,7 @@
 
         <!-- MY SAVED CHAR -->
         <b-col md="4" class="savedChar">
-          <h1>My characters</h1>
+          <h2>My list</h2>
 
           <div v-for="(myChar, index) in mySavedChar" :key="myChar.index">
             <h5>{{ myChar.name }}</h5>
@@ -236,21 +242,61 @@ export default {
 <style>
 @import url(https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap);
 
+/*  HEADLINE */
 .headline {
   margin: auto;
-
   font-size: 30px;
 }
+.subHeadline {
+  font-size: 16px;
+  text-align: center;
+  margin-top: 10px;
+  margin-left: 20%;
+  margin-right: 20%;
+  text-shadow: 3px 3px black !important;
+}
+
+/* CHARACTTER AREA */
 .container {
   text-align: left;
   font-family: "Press Start 2P";
 }
+
+.charCard {
+  background-color: rgba(218, 165, 32, 0.235);
+  margin-bottom: 20px;
+  padding: 20px;
+}
+
+.charChard,
+.charImg,
+.charName {
+  cursor: pointer;
+}
+
+.bottleImage {
+  width: 20px;
+  padding: 5px;
+  margin: auto;
+}
+
+/* TABLE */
 
 #my-table td:nth-child(1) {
   display: none;
 }
 #my-table th:nth-child(1) {
   display: none;
+}
+
+.b-table {
+  color: rgb(201, 199, 199) !important;
+}
+
+/* MY LIST  */
+.savedChar h2 {
+  font-size: 23px !important;
+  text-shadow: 3px 3px black !important;
 }
 
 .savedChar {
@@ -267,13 +313,12 @@ export default {
   font-family: "Press Start 2P", cursive;
   color: goldenrod;
   text-shadow: 3px 3px black;
-  font-size: 12px;
+  font-size: 12px !important;
+
   float: right;
 }
 
-.b-table {
-  color: rgb(201, 199, 199) !important;
-}
+/* FONT */
 
 h1 {
   color: #ffcc33;
@@ -289,6 +334,7 @@ h1 {
   padding: 7px;
 }
 
+/* BUTTONS */
 button {
   width: 150px;
   height: 50px;
@@ -299,7 +345,7 @@ button {
   font-family: "Press Start 2P", cursive;
   color: goldenrod;
   text-shadow: 3px 3px black;
-  font-size: 12px;
+  font-size: 16px !important;
   font-weight: 100;
   margin: 10px !important;
 }
@@ -311,33 +357,6 @@ button:disabled {
   opacity: 0.7;
 }
 
-.charCard {
-  background-color: rgba(218, 165, 32, 0.235);
-
-  margin-bottom: 20px;
-  padding: 20px;
-}
-
-.charChard,
-img,
-h1 {
-  cursor: pointer;
-}
-
-.bottleImage {
-  width: 20px;
-  padding: 5px;
-  margin: auto;
-}
-
-.searchArea {
-  margin: 20px;
-}
-
-.searchForm {
-  margin-right: 30px;
-}
-
 .startChatButton {
   background: url(../assets/smile.png);
   background-repeat: no-repeat;
@@ -346,6 +365,16 @@ h1 {
   padding: 5px;
   width: 138px;
   height: 33px;
+}
+
+/* SEARCH  */
+
+.searchArea {
+  margin: 20px;
+}
+
+.searchForm {
+  margin-right: 30px;
 }
 
 /* SIDEBAR */
