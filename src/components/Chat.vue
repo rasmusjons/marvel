@@ -37,7 +37,7 @@ export default {
       user: "",
       message: "",
       messages: [],
-      socket: io(process.env.PORT || 3000)
+      socket: io(process.env.PORT)
     };
   },
   methods: {

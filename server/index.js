@@ -21,7 +21,6 @@ app.use(
 
 //io.on tar en "event" att lyssna efter och en callback som sedan ska ske.
 io.on("connection", socket => {
-  console.log("new websocket connection", socket);
   socket.on("SEND_MESSAGE", function(data) {
     console.log("server", data);
     io.emit("MESSAGE", data);
